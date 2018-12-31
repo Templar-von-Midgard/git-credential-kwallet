@@ -1,0 +1,7 @@
+BasedOnStyle: LLVM
+PointerBindsToType: true
+AlwaysBreakTemplateDeclarations: true
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+ColumnLimit: 120
