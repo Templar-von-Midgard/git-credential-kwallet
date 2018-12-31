@@ -38,7 +38,8 @@ int main(int argc, char* argv[]) {
   QCommandLineOption debug{"debug", tr("Output debug messages to stderr")};
   parser.addOption(debug);
 
-  parser.addPositionalArgument("operation", tr("The operation as defined by git-credentials"), "<get|store|erase>");
+  parser.addPositionalArgument(
+      "operation", tr("The operation as defined by git-credentials (either get, store or erase"), "<get|store|erase>");
 
   parser.process(app);
 
