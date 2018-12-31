@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
   parser.addOption(debug);
 
   parser.addPositionalArgument(
-      "operation", tr("The operation as defined by git-credentials (either get, store or erase"), "<get|store|erase>");
+      "operation", tr("The operation as defined by git-credentials (either get, store or erase)"), "<get|store|erase>");
 
   parser.process(app);
 
