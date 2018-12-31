@@ -6,6 +6,8 @@
 
 #include <KWallet/KWallet>
 
+#include "debug.hpp"
+
 namespace {
 // Reflection
 template <auto member>
@@ -83,22 +85,30 @@ using KWallet::Wallet;
 
 Credential get(Credential&& credential, WalletSettings settings) {
   if (credential.username.isEmpty()) {
+    debugStream() << "no username specified";
     return {};
   }
   if (Wallet::folderDoesNotExist(settings.wallet, settings.folder)) {
+    debugStream() << "no such folder";
     return {};
   }
   auto keyName = composeKeyName(credential);
   if (Wallet::keyDoesNotExist(settings.wallet, settings.folder, keyName)) {
+    debugStream() << "credentials not found";
     return {};
   }
   auto wallet = std::unique_ptr<Wallet>(Wallet::openWallet(settings.wallet, 0));
   if (wallet == nullptr) {
+    debugStream() << "couldn't open wallet";
     return {};
   }
-  wallet->setFolder(settings.folder);
+  if (!wallet->setFolder(settings.folder)) {
+    debugStream() << "couldn't open folder";
+    return {};
+  }
   QString buffer;
   if (wallet->readPassword(keyName, buffer) != 0) {
+    debugStream() << "couldn't read password";
     return {};
   }
   credential.password = buffer;
@@ -108,36 +118,53 @@ Credential get(Credential&& credential, WalletSettings settings) {
 void store(Credential&& credential, WalletSettings settings) {
   auto wallet = std::unique_ptr<Wallet>(Wallet::openWallet(settings.wallet, 0));
   if (wallet == nullptr) {
+    debugStream() << "couldn't open wallet";
     return;
   }
   if (!wallet->hasFolder(settings.folder)) {
     if (!wallet->createFolder(settings.folder)) {
+      debugStream() << "couldn't create folder";
       return;
     }
   }
-  wallet->setFolder(settings.folder);
-  auto keyName = composeKeyName(credential);
-  if (credential.password.isEmpty()) {
+  if (!wallet->setFolder(settings.folder)) {
+    debugStream() << "couldn't open folder";
     return;
   }
-  wallet->writePassword(keyName, credential.password);
+  auto keyName = composeKeyName(credential);
+  if (credential.password.isEmpty()) {
+    debugStream() << "no password specified";
+    return;
+  }
+  if (wallet->writePassword(keyName, credential.password) != 0) {
+    debugStream() << "couldn't write password";
+  }
 }
 
 void erase(Credential&& credential, WalletSettings settings) {
   if (credential.username.isEmpty()) {
+    debugStream() << "no username specified";
     return;
   }
   if (Wallet::folderDoesNotExist(settings.wallet, settings.folder)) {
+    debugStream() << "no such folder";
     return;
   }
   auto keyName = composeKeyName(credential);
   if (Wallet::keyDoesNotExist(settings.wallet, settings.folder, keyName)) {
+    debugStream() << "credentials not found";
     return;
   }
   auto wallet = std::unique_ptr<Wallet>(Wallet::openWallet(settings.wallet, 0));
   if (wallet == nullptr) {
+    debugStream() << "couldn't open wallet";
     return;
   }
-  wallet->setFolder(settings.folder);
-  wallet->removeEntry(keyName);
+  if (!wallet->setFolder(settings.folder)) {
+    debugStream() << "couldn't open folder";
+    return;
+  }
+  if (wallet->removeEntry(keyName) != 0) {
+    debugStream() << "couldn't delete entry";
+  }
 }

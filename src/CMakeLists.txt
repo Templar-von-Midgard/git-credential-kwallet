@@ -9,6 +9,8 @@ add_executable(git-credential-kwallet
   main.cpp
   Credential.hpp
   Credential.cpp
+  debug.hpp
+  debug.cpp
 )
 target_link_libraries(git-credential-kwallet KF5::Wallet)
 

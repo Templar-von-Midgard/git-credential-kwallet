@@ -11,6 +11,7 @@
 #include "version.h"
 
 #include "Credential.hpp"
+#include "debug.hpp"
 
 QString tr(const char* str) {
   return QCoreApplication::translate("git-credential-kwallet", str);
@@ -40,14 +41,22 @@ int main(int argc, char* argv[]) {
   parser.addPositionalArgument("operation", tr("The operation as defined by git-credentials"), "<get|store|erase>");
 
   parser.process(app);
+
+  QLoggingCategory::setFilterRules(QStringLiteral("git-credential-kwallet.debug=") +
+                                   (parser.isSet(debug) ? "true" : "false"));
+
   auto args = parser.positionalArguments();
   if (args.size() != 1) {
+    debugStream() << "No operation specified";
     parser.showHelp();
   }
   auto operation = args.first();
 
   auto credential = read();
   WalletSettings settings{parser.value(wallet), parser.value(folder), parser.isSet(debug)};
+  debugStream() << "operation:" << operation << "wallet:" << settings.wallet << "folder:" << settings.folder
+                << "protocol:" << credential.protocol << "host:" << credential.host
+                << "username:" << credential.username;
   if (operation == QStringLiteral("get")) {
     write(get(std::move(credential), settings));
   } else if (operation == QStringLiteral("store")) {
