@@ -10,7 +10,7 @@
 
 namespace {
 // Reflection
-template <auto member>
+template <QString Credential::*member>
 const auto field_name = QStringLiteral("");
 
 template <>
@@ -22,7 +22,7 @@ const auto field_name<&Credential::username> = QStringLiteral("username");
 template <>
 const auto field_name<&Credential::password> = QStringLiteral("password");
 
-template <auto member>
+template <QString Credential::*member>
 auto field_member() {
   return std::make_pair(field_name<member>, member);
 }
@@ -34,9 +34,10 @@ const std::map<QString, QString Credential::*, std::less<>> fieldMapping = {
 
 namespace {
 // Helpers
-template <auto member>
+template <QString Credential::*member>
 void printField(QTextStream& out, const Credential& cred) {
-  if (auto&& value = cred.*member; !value.isEmpty()) {
+  auto&& value = cred.*member;
+  if (!value.isEmpty()) {
     out << field_name<member> << '=' << value << '\n';
   }
 }
