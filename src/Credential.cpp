@@ -65,7 +65,7 @@ Credential read() {
     if (splitPosition == -1) {
       continue;
     }
-    auto fieldName = line.leftRef(splitPosition);
+    auto fieldName = line.left(splitPosition);
     auto it = fieldMapping.find(fieldName);
     if (it == fieldMapping.end()) {
       continue;
