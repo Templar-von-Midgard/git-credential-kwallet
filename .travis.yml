@@ -1,0 +1,19 @@
+language: cpp
+os: linux
+dist: xenial
+compiler:
+  - gcc
+  - clang
+addons:
+  apt:
+    update: true
+    packages:
+    - cmake
+    - ninja
+    - libkf5wallet-dev
+    - help2man
+script:
+  - mkdir build
+  - cd build
+  - cmake -DCMAKE_BUILD_TYPE=Release ..
+  - cmake --build . --target all
