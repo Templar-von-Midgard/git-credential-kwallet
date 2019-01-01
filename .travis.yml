@@ -4,16 +4,19 @@ dist: xenial
 compiler:
   - gcc
   - clang
+env:
+  - GENERATOR='Unix Makefiles'
+  - GENERATOR=Ninja
 addons:
   apt:
     update: true
     packages:
     - cmake
-    - ninja
+    - ninja-build
     - libkf5wallet-dev
     - help2man
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=Release ..
+  - cmake -G "$GENERATOR" -DCMAKE_BUILD_TYPE=Release ..
   - cmake --build . --target all

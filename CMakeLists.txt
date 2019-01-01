@@ -9,8 +9,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 project(git-credential-kwallet VERSION 0.1.0 LANGUAGES CXX)
 
 include(FeatureSummary)
-find_package(KF5Wallet "5.46.0" REQUIRED)
-find_package(help2man)
+find_package(KF5Wallet "5.18.0" REQUIRED)
+find_package(help2man "1.47.3")
 
 add_subdirectory(src)
 
