@@ -1,5 +1,3 @@
-#include <optional>
-
 #include <QtCore/QCoreApplication>
 
 #include <QtCore/QCommandLineOption>
