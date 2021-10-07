@@ -11,7 +11,7 @@ jobs:
 
       - name: Dependencies
         run: |
-          apt-get install libkf5wallet-dev help2man
+          sudo apt-get install libkf5wallet-dev help2man
 
       - name: Configure
         run: |
