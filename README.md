@@ -22,3 +22,14 @@ Configure as:
     helper = kwallet
 ```
 See also [gitcredentials](https://git-scm.com/docs/gitcredentials).
+
+`git-credential-kwallet` is a git credential helper, it is meant to be invoked by git, not manually.
+If you run into an issue and you want to investigate it by running the software directly, then be sure to close the input stream. e.g.:
+```bash
+git-credential-kwallet --debug store <<EOF
+protocol=https
+host=example.com
+username=bob
+password=s3cre7
+EOF
+```
