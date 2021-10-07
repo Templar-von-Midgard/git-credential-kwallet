@@ -1,0 +1,32 @@
+name: Build
+on:
+  push: {}
+  pull_request: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Dependencies
+        run: |
+          sudo apt-get install libkf5wallet-dev help2man
+
+      - name: Configure
+        run: |
+          mkdir _builds && cd _builds
+          cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+
+      - name: Build
+        run: cmake --build _builds
+
+      - name: Package
+        run: cmake --build _builds --target package
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: git-credential-kwallet-${{ env.GIT_HASH_SHORT }}-${{ github.run_id }}
+          path: _builds/git-credential-kwallet*.tar.gz
+          if-no-files-found: error
