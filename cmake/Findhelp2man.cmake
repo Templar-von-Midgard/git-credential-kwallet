@@ -7,7 +7,7 @@ if(HELP2MAN)
     COMMAND ${HELP2MAN} --version
     OUTPUT_VARIABLE help2man_VERSION
   )
-  string(REGEX REPLACE [[GNU help2man ([0-9]+\.[0-9]+\.[0-9]+).*]] ${help2man_VERSION} help2man_VERSION)
+  string(REGEX REPLACE [[GNU help2man ([0-9]+\.[0-9]+\.[0-9]+).*]] "\\1" help2man_VERSION ${help2man_VERSION})
 endif()
 
 include(FindPackageHandleStandardArgs)
